@@ -8,7 +8,7 @@
 * Update readme
 * Add pipfile for reproducibility
 
-## 1.0 
+## 1.0.0
 ----------------
 
 * Fork from strongio/keras-bert
