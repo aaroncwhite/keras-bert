@@ -1,0 +1,51 @@
+version: '2.3'
+services:
+  base:
+    hostname: tf
+    build: 
+      context: .
+      args:
+        - DEV=1
+        - CI_USER_TOKEN=${CI_USER_TOKEN}
+        
+    image: tf:latest
+  jupyter:
+    image: tf:latest
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES}
+      - CUDA_DEVICE_ORDER=${CUDA_DEVICE_ORDER}
+    volumes:
+      - .:/app
+      - ./logs:/logs
+    runtime: nvidia
+    ports:
+      - "8888:8888"
+    entrypoint:
+      - jupyter
+      - lab
+  tensorboard:
+    image: tf:latest
+    volumes:
+      - .:/app
+      - ./logs:/logs
+
+    runtime: nvidia
+    ports:
+      - "6006:6006"
+    entrypoint:
+      - tensorboard
+      - --logdir
+      - logs
+  app:
+    image: tf:latest
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=${NVIDIA_VISIBLE_DEVICES}
+      - CUDA_DEVICE_ORDER=${CUDA_DEVICE_ORDER}
+
+    volumes:
+      - .:/app
+      - ./logs:/logs
+    runtime: nvidia
+    depends_on:
+      - tensorboard
+
