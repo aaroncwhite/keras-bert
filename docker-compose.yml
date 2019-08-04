@@ -6,8 +6,7 @@ services:
       context: .
       args:
         - DEV=1
-        - CI_USER_TOKEN=${CI_USER_TOKEN}
-        
+      
     image: tf:latest
   jupyter:
     image: tf:latest
